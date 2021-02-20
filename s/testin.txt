@@ -1,0 +1,44 @@
+This is a UDP test file!
+1234567890
+,.?!-_+=
+
+
+
+3-1
+利用数据报套接字在用户空间实现面向连接的可靠数据传输，
+功能：建立连接、差错检测、确认重传。
+流量控制采用停等机制，
+完成给定测试文件的单向传输。
+在UDP服务上实现
+
+数据报套接字：datagram sockets，使用UDP协议，支持主机之间面向非连接、不可靠的信息传输
+使用语言：C、C++
+UDP服务：不可靠，不能提供连接建立、可靠性、流量控制、拥塞控制、时延和带宽保证
+
+
+Socket编程 – 举例（数据报客户端）
+void main()
+{
+WSAStartup(wVersionRequested, &wsaData);
+SOCKET sockClient = socket(AF_INET, SOCK_DGRAM, 0);
+SOCKADDR_IN addrSrv;
+sendto(sockClient, sendBuf, sendlen, 0, (SOCKADDR *)&addrSrv, len); 
+recvfrom(sockClient, recvBuf, 50, 0, (SOCKADDR *)&addrSrv, &len);
+closesocket(sockClient);
+WSACleanup();
+}
+
+void main()
+{
+WSAStartup(wVersionRequested, &wsaData);
+SOCKET sockSrv = socket(AF_INET, SOCK_DGRAM, 0);
+SOCKADDR_IN addrSrv;
+bind(sockSrv, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR));
+SOCKADDR_IN addrClient; //远程IP地址
+loop {
+recvfrom(sockSrv, recvBuf, 50, 0,(SOCKADDR *)&addrClient,&len);
+sendto(sockSrv, sendBuf, sendlen, 0,(SOCKADDR *) &addrClient,len);
+}
+closesocket(sockClient);
+WSACleanup();
+}
